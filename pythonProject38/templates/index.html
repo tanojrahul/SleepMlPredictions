@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Condition Predictor</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007BFF;
+        }
+
+        button {
+            width: 100%;
+            background-color: #007BFF;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 30px;
+            background-color: #e9f7f2;
+            padding: 20px;
+            border: 1px solid #d1e7dd;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        #result p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>Predict Optimal Sleep Conditions</h2>
+    <form id="predictionForm">
+        <label for="bp_systolic">Systolic Blood Pressure:</label>
+        <input type="text" id="bp_systolic" placeholder="e.g. 120"><br>
+
+        <label for="bp_diastolic">Diastolic Blood Pressure:</label>
+        <input type="text" id="bp_diastolic" placeholder="e.g. 80"><br>
+
+        <label for="stress_level">Stress Level:</label>
+        <input type="text" id="stress_level" placeholder="e.g. 5"><br>
+
+        <label for="room_temp">Room Temperature:</label>
+        <input type="text" id="room_temp" placeholder="e.g. 22°C"><br>
+
+        <label for="humidity">Humidity:</label>
+        <input type="text" id="humidity" placeholder="e.g. 45%"><br>
+
+        <label for="heart_rate">Heart Rate:</label>
+        <input type="text" id="heart_rate" placeholder="e.g. 70 bpm"><br>
+
+        <label for="light_red_input">Red Light Intensity (0-255):</label>
+        <input type="text" id="light_red_input" placeholder="e.g. 100"><br>
+
+        <label for="light_blue_input">Blue Light Intensity (0-255):</label>
+        <input type="text" id="light_blue_input" placeholder="e.g. 100"><br>
+
+        <label for="light_green_input">Green Light Intensity (0-255):</label>
+        <input type="text" id="light_green_input" placeholder="e.g. 100"><br>
+
+        <label for="air_quality">Air Quality:</label>
+        <input type="text" id="air_quality" placeholder="e.g. 75"><br>
+
+        <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <div id="result" style="display: none;"></div>
+
+    <script>
+        function submitForm() {
+            const formData = {
+                'bp_systolic': document.getElementById('bp_systolic').value,
+                'bp_diastolic': document.getElementById('bp_diastolic').value,
+                'stress_level': document.getElementById('stress_level').value,
+                'room_temp': document.getElementById('room_temp').value,
+                'humidity': document.getElementById('humidity').value,
+                'heart_rate': document.getElementById('heart_rate').value,
+                'light_red_input': document.getElementById('light_red_input').value,
+                'light_blue_input': document.getElementById('light_blue_input').value,
+                'light_green_input': document.getElementById('light_green_input').value,
+                'air_quality': document.getElementById('air_quality').value
+            };
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `
+                    <h3>Prediction Results</h3>
+                    <p>Optimal Temperature: ${data.optimal_temp}°C</p>
+                    <p>Optimal Pressure: ${data.optimal_pressure}</p>
+                    <p>Optimal Sound Frequency: ${data.optimal_sound_freq} Hz</p>
+                    <p>Light Red Intensity: ${data.light_red}</p>
+                    <p>Light Blue Intensity: ${data.light_blue}</p>
+                    <p>Light Green Intensity: ${data.light_green}</p>
+                    <p>Light Yellow Intensity: ${data.light_yellow}</p>
+                    <p>Light Orange Intensity: ${data.light_orange}</p>
+                `;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
