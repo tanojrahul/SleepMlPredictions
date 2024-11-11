@@ -74,9 +74,9 @@ model.fit(X_train, y_train)
 # Predictions
 y_pred = model.predict(X_test)
 
-# Evaluate the model
-mse = mean_squared_error(y_test, y_pred)
-print(f'Mean Squared Error: {mse}')
+# # Evaluate the model
+# mse = mean_squared_error(y_test, y_pred)
+# print(f'Mean Squared Error: {mse}')
 
 
 import joblib
@@ -129,5 +129,5 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
 
