@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, jsonify
 np.random.seed(42)
 
 # Generate synthetic data
-n_samples = 10000
+n_samples = 100
 
 # Input features
 bp_systolic = np.random.randint(90, 150, size=n_samples)
